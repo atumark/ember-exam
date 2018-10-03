@@ -27,11 +27,12 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+#      - run: yarn install
       - run: sudo npm i -g bower
       - run: bower install
       - run: sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
       - run: sudo chmod ugo+x /usr/local/bin/phantomjs
+      - run: ember install ember-exam
 
       - save_cache:
           paths:
@@ -39,4 +40,5 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: yarn test
+#      - run: yarn test
+      - run: ember exam
