@@ -1,42 +1,17 @@
----
-language: node_js
-node_js:
-  - "4"
-  - "6"
-  - "stable"
-
-sudo: false
-dist: trusty
-
-addons:
-  chrome: stable
-
-cache:
-  directories:
-    - $HOME/.npm
-
-env:
-  - TEST_FRAMEWORK=ember-cli-qunit
-  - TEST_FRAMEWORK=ember-cli-mocha
-
-matrix:
-  fast_finish: true
-
-branches:
-  only:
-    - master
-
-before_install:
-  - npm config set spin false
-  - npm install -g npm@4
-  - npm --version
-
-install:
-  - npm install
-  - ./bin/install-test-framework.sh
-
-script:
-  - npm test
-
-after_script:
-  - npm run coverage
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:7.10.1-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+- run: yarn test
