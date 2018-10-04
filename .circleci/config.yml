@@ -1,44 +1,42 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-version: 2
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:7.10
-    parallelism: 2
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+---
+language: node_js
+node_js:
+  - "4"
+  - "6"
+  - "stable"
 
-    working_directory: ~/repo
+sudo: false
+dist: trusty
 
-    steps:
-      - checkout
+addons:
+  chrome: stable
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+cache:
+  directories:
+    - $HOME/.npm
 
-      - run: yarn install
-      - run: sudo npm i -g bower
-      - run: bower install
-      - run: sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-      - run: sudo chmod ugo+x /usr/local/bin/phantomjs
-      - run: ember install ember-exam
+env:
+  - TEST_FRAMEWORK=ember-cli-qunit
+  - TEST_FRAMEWORK=ember-cli-mocha
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn test
-      - run: ember exam
+matrix:
+  fast_finish: true
+
+branches:
+  only:
+    - master
+
+before_install:
+  - npm config set spin false
+  - npm install -g npm@4
+  - npm --version
+
+install:
+  - npm install
+  - ./bin/install-test-framework.sh
+
+script:
+  - npm test
+
+after_script:
+  - npm run coverage
