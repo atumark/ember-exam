@@ -33,8 +33,8 @@ jobs:
       - run: yarn install
 #      - run: sudo npm i -g bower
 #      - run: bower install
-      - run: sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-      - run: sudo chmod ugo+x /usr/local/bin/phantomjs
+#      - run: sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
+#      - run: sudo chmod ugo+x /usr/local/bin/phantomjs
 #      - run: ember install ember-exam
 
       - save_cache:
