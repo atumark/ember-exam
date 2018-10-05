@@ -11,7 +11,6 @@ function getNumberOfTests(str) {
   return match && parseInt(match[1], 10);
 }
 
-#var TOTAL_NUM_TESTS = 50;
 var TOTAL_NUM_TESTS = 53;
 
 describe('Acceptance | Exam Command', function() {
